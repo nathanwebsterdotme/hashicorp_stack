@@ -1,0 +1,8 @@
+{
+  "datacenter": "local-consul",
+  "data_dir": "/opt/consul",
+  "log_level": "INFO",
+  "server": false,
+  "bind_addr": "{{ ansible_enp0s8.ipv4.address }}",
+  "client_addr": "{{ ansible_enp0s8.ipv4.address }}"
+}

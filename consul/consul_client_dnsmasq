@@ -1,0 +1,2 @@
+# Enable forward lookup of the 'consul' domain:
+server=/consul/{{ ansible_enp0s8.ipv4.address }}#8600

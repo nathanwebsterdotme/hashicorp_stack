@@ -1,0 +1,60 @@
+---
+- name: Configure Nomad Server
+  hosts: all
+  become: yes
+  gather_facts: true
+
+  vars:
+    nomad:
+      version: '0.8.3'
+
+  tasks:
+  - name: APT Install
+    apt:
+      pkg: "{{ item }}"
+      force: yes
+      update_cache: yes
+      state: present
+    with_items:
+      - unzip
+
+  - name: download nomad package
+    get_url:
+      url: "https://releases.hashicorp.com/nomad/{{ nomad.version }}/nomad_{{ nomad.version }}_linux_amd64-lxc.zip"
+      dest: /usr/local/bin
+
+  - name: Unzip nomad package
+    unarchive:
+      src: /usr/local/bin/nomad_{{ nomad.version }}_linux_amd64-lxc.zip
+      dest: /usr/local/bin/
+      remote_src: yes
+      mode: 0777
+
+  - name: Create Nomad Directory
+    file:
+      state: directory
+      dest: "{{ item }}"
+    with_items:
+      - '/opt/nomad'
+      - '/opt/nomad/config'
+
+  - name: Copy nomad configuration
+    template:
+      src: nomad_server.config
+      dest: /opt/nomad/config/nomad_server_config.json
+
+  - name: Install service file
+    copy:
+      src: nomad_server.service
+      dest: /etc/systemd/system/nomad_server.service
+
+  - name: Start nomad
+    service:
+      name: nomad_server
+      state: started
+
+  - name: Set nomad addr to make cli work
+    lineinfile:
+      path: /home/vagrant/.bashrc
+      insertafter: EOF
+      line: "export NOMAD_ADDR=http://{{ ansible_enp0s8.ipv4.address }}:4646"

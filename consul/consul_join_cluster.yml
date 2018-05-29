@@ -1,0 +1,9 @@
+---
+- name: Join Consul Cluster
+  hosts: all
+  become: yes
+  gather_facts: true
+
+  tasks:
+    - name: Join Consul Cluster
+      shell: "consul join -http-addr={{ ansible_enp0s8.ipv4.address }}:8500 10.75.10.10"

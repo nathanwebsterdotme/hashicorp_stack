@@ -1,0 +1,60 @@
+---
+- name: Configure Consul Server
+  hosts: all
+  become: yes
+  gather_facts: true
+
+  vars:
+    consul:
+      version: '1.1.0'
+
+  tasks:
+  - name: APT Install
+    apt:
+      pkg: "{{ item }}"
+      force: yes
+      update_cache: yes
+      state: present
+    with_items:
+      - unzip
+
+  - name: download consul package
+    get_url:
+      url: "https://releases.hashicorp.com/consul/{{ consul.version }}/consul_{{ consul.version }}_linux_amd64.zip"
+      dest: /usr/local/bin
+
+  - name: Unzip consul package
+    unarchive:
+      src: /usr/local/bin/consul_{{ consul.version }}_linux_amd64.zip
+      dest: /usr/local/bin/
+      remote_src: yes
+      mode: 0777
+
+  - name: Create Consul Directory
+    file:
+      state: directory
+      dest: "{{ item }}"
+    with_items:
+      - '/opt/consul'
+      - '/opt/consul/config'
+
+  - name: Copy consul configuration
+    template:
+      src: consul_server_config
+      dest: /opt/consul/config/consul_server_config.json
+
+  - name: Install service file
+    copy:
+      src: consul.service
+      dest: /etc/systemd/system/consul.service
+
+  - name: Start consul
+    service:
+      name: consul
+      state: started
+
+  - name: Set consul addr to make cli work
+    lineinfile:
+      path: /home/vagrant/.bashrc
+      insertafter: EOF
+      line: "export CONSUL_HTTP_ADDR={{ ansible_enp0s8.ipv4.address }}:8500"
