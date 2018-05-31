@@ -55,7 +55,7 @@ Vagrant.configure("2") do |config|
       }
     end
     config.vm.provision "ansible" do |ansible|
-      ansible.playbook = "consul/consul_join_cluster.yml"
+      ansible.playbook = "consul/consul_client_join_cluster.yml"
       ansible.extra_vars = {
         ansible_python_interpreter: "/usr/bin/python3",
       }
@@ -85,7 +85,7 @@ Vagrant.configure("2") do |config|
       }
     end
     config.vm.provision "ansible" do |ansible|
-      ansible.playbook = "consul/consul_join_cluster.yml"
+      ansible.playbook = "consul/consul_client_join_cluster.yml"
       ansible.extra_vars = {
         ansible_python_interpreter: "/usr/bin/python3",
       }

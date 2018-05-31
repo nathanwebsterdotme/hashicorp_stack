@@ -64,8 +64,8 @@
       name: consul
       state: started
 
-  - name: Set consul addr to make cli work
-    lineinfile:
-      path: /home/vagrant/.bashrc
-      insertafter: EOF
-      line: "export CONSUL_HTTP_ADDR={{ ansible_enp0s8.ipv4.address }}:8500"
+  # - name: Set consul addr to make cli work
+  #   lineinfile:
+  #     path: /home/vagrant/.bashrc
+  #     insertafter: EOF
+  #     line: "export CONSUL_HTTP_ADDR={{ ansible_enp0s8.ipv4.address }}:8500"
