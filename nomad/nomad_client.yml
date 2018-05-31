@@ -6,7 +6,7 @@
 
   vars:
     nomad:
-      version: '0.8.3'
+      version: '0.8.1'
 
   tasks:
   - name: APT Install Required Packages
