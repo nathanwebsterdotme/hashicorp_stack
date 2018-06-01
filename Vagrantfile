@@ -105,6 +105,33 @@ Vagrant.configure("2") do |config|
     end
   end
 
+
+  ### TRAEFIK ####
+
+  config.vm.define "traefik1" do |traefik1|
+    traefik1.vm.hostname = "traefik1"
+    traefik1.vm.network "private_network", ip: "10.75.10.20"
+    config.vm.provision "ansible" do |ansible|
+      ansible.playbook = "consul/consul_client.yml"
+      ansible.extra_vars = {
+        ansible_python_interpreter: "/usr/bin/python3",
+      }
+    end
+    config.vm.provision "ansible" do |ansible|
+      ansible.playbook = "consul/consul_client_join_cluster.yml"
+      ansible.extra_vars = {
+        ansible_python_interpreter: "/usr/bin/python3",
+      }
+    end
+    config.vm.provision "ansible" do |ansible|
+      ansible.playbook = "traefik/traefik.yml"
+      ansible.extra_vars = {
+        ansible_python_interpreter: "/usr/bin/python3",
+      }
+    end
+  end
+
+
   # config.vm.define "nomad2" do |nomad2|
   #   consul3.vm.hostname = "consul3"
   #   consul3.vm.network "private_network", ip: "10.75.10.12"

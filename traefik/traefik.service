@@ -1,0 +1,12 @@
+[Unit]
+Description=Traefik
+
+[Service]
+KillMode=process
+KillSignal=SIGINT
+ExecStart=/usr/local/bin/traefik -c /opt/traefik/config/traefik.toml
+ExecReload=/bin/kill -HUP $MAINPID
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target

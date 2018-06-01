@@ -1,0 +1,48 @@
+---
+- name: Configure Traefik Server
+  hosts: all
+  become: yes
+  gather_facts: true
+
+  vars:
+    traefik:
+      version: 'v1.6.2'
+
+  tasks:
+  - name: APT Install
+    apt:
+      pkg: "{{ item }}"
+      force: yes
+      update_cache: yes
+      state: present
+    with_items:
+      - unzip
+
+  - name: download traefik binary
+    get_url:
+      url: "https://github.com/containous/traefik/releases/download/{{ traefik.version }}/traefik"
+      dest: /usr/local/bin/traefik
+      mode: 0777
+
+  - name: Create Traefik Directory
+    file:
+      state: directory
+      dest: "{{ item }}"
+    with_items:
+      - '/opt/traefik'
+      - '/opt/traefik/config'
+
+  - name: Copy traefik configuration
+    copy:
+      src: traefik.toml
+      dest: /opt/traefik/config/traefik.toml
+
+  - name: Install service file
+    copy:
+      src: traefik.service
+      dest: /etc/systemd/system/traefik.service
+
+  - name: Start traefik
+    service:
+      name: traefik
+      state: started

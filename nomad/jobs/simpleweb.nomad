@@ -3,7 +3,7 @@ job "simpleweb" {
   type = "service"
 
   group "simpleweb" {
-    count = 1
+    count = 5
 
     update {
       stagger          = "5s"
@@ -37,7 +37,7 @@ job "simpleweb" {
       service {
         port = "http"
         name = "simpleweb"
-        tags = ["simpleweb"]
+        tags = ["traefik.enable=true", "simpleweb"]
 
         check {
           type     = "tcp"
