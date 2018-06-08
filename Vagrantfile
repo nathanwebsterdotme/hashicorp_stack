@@ -10,11 +10,13 @@ Vagrant.configure("2") do |config|
       v.cpus = 1
   end
 
+  ### CONSUL ###
+
   config.vm.define "consul1" do |consul1|
     consul1.vm.hostname = "consul1"
     consul1.vm.network "private_network", ip: "10.75.10.10"
-    config.vm.provision "ansible" do |ansible|
-      ansible.playbook = "consul/consul_server.yml"
+    consul1.vm.provision "ansible" do |ansible|
+      ansible.playbook = "consul/consul1.yml"
       ansible.extra_vars = {
         ansible_python_interpreter: "/usr/bin/python3",
       }
@@ -24,9 +26,8 @@ Vagrant.configure("2") do |config|
   config.vm.define "consul2" do |consul2|
     consul2.vm.hostname = "consul2"
     consul2.vm.network "private_network", ip: "10.75.10.11"
-    config.vm.provision "ansible" do |ansible|
-      ansible.playbook = "consul/consul_server.yml"
-      ansible.playbook = "consul/consul_join_cluster.yml"
+    consul2.vm.provision "ansible" do |ansible|
+      ansible.playbook = "consul/consul2_3.yml"
       ansible.extra_vars = {
         ansible_python_interpreter: "/usr/bin/python3",
       }
@@ -36,39 +37,22 @@ Vagrant.configure("2") do |config|
   config.vm.define "consul3" do |consul3|
     consul3.vm.hostname = "consul3"
     consul3.vm.network "private_network", ip: "10.75.10.12"
-    config.vm.provision "ansible" do |ansible|
-      ansible.playbook = "consul/consul_server.yml"
-      ansible.playbook = "consul/consul_join_cluster.yml"
+    consul3.vm.provision "ansible" do |ansible|
+      ansible.playbook = "consul/consul2_3.yml"
       ansible.extra_vars = {
         ansible_python_interpreter: "/usr/bin/python3",
       }
     end
   end
 
+
+  ### NOMAD ###
+
   config.vm.define "nomad1" do |nomad1|
     nomad1.vm.hostname = "nomad1"
     nomad1.vm.network "private_network", ip: "10.75.10.15"
-    config.vm.provision "ansible" do |ansible|
-      ansible.playbook = "consul/consul_client.yml"
-      ansible.extra_vars = {
-        ansible_python_interpreter: "/usr/bin/python3",
-      }
-    end
-    config.vm.provision "ansible" do |ansible|
-      ansible.playbook = "consul/consul_client_join_cluster.yml"
-      ansible.extra_vars = {
-        ansible_python_interpreter: "/usr/bin/python3",
-      }
-    end
-    config.vm.provision "ansible" do |ansible|
-      ansible.playbook = "nomad/nomad_server.yml"
-      # ansible.playbook = "consul/_join_cluster.yml"
-      ansible.extra_vars = {
-        ansible_python_interpreter: "/usr/bin/python3",
-      }
-    end
-    config.vm.provision "ansible" do |ansible|
-      ansible.playbook = "nomad/nomad_client.yml"
+    nomad1.vm.provision "ansible" do |ansible|
+      ansible.playbook = "nomad/nomad.yml"
       ansible.extra_vars = {
         ansible_python_interpreter: "/usr/bin/python3",
       }
@@ -78,27 +62,8 @@ Vagrant.configure("2") do |config|
   config.vm.define "nomad2" do |nomad2|
     nomad2.vm.hostname = "nomad2"
     nomad2.vm.network "private_network", ip: "10.75.10.16"
-    config.vm.provision "ansible" do |ansible|
-      ansible.playbook = "consul/consul_client.yml"
-      ansible.extra_vars = {
-        ansible_python_interpreter: "/usr/bin/python3",
-      }
-    end
-    config.vm.provision "ansible" do |ansible|
-      ansible.playbook = "consul/consul_client_join_cluster.yml"
-      ansible.extra_vars = {
-        ansible_python_interpreter: "/usr/bin/python3",
-      }
-    end
-    config.vm.provision "ansible" do |ansible|
-      ansible.playbook = "nomad/nomad_server.yml"
-      # ansible.playbook = "consul/_join_cluster.yml"
-      ansible.extra_vars = {
-        ansible_python_interpreter: "/usr/bin/python3",
-      }
-    end
-    config.vm.provision "ansible" do |ansible|
-      ansible.playbook = "nomad/nomad_client.yml"
+    nomad2.vm.provision "ansible" do |ansible|
+      ansible.playbook = "nomad/nomad.yml"
       ansible.extra_vars = {
         ansible_python_interpreter: "/usr/bin/python3",
       }
@@ -106,24 +71,12 @@ Vagrant.configure("2") do |config|
   end
 
 
-  ### TRAEFIK ####
+  ### TRAEFIK ###
 
   config.vm.define "traefik1" do |traefik1|
     traefik1.vm.hostname = "traefik1"
     traefik1.vm.network "private_network", ip: "10.75.10.20"
-    config.vm.provision "ansible" do |ansible|
-      ansible.playbook = "consul/consul_client.yml"
-      ansible.extra_vars = {
-        ansible_python_interpreter: "/usr/bin/python3",
-      }
-    end
-    config.vm.provision "ansible" do |ansible|
-      ansible.playbook = "consul/consul_client_join_cluster.yml"
-      ansible.extra_vars = {
-        ansible_python_interpreter: "/usr/bin/python3",
-      }
-    end
-    config.vm.provision "ansible" do |ansible|
+    traefik1.vm.provision "ansible" do |ansible|
       ansible.playbook = "traefik/traefik.yml"
       ansible.extra_vars = {
         ansible_python_interpreter: "/usr/bin/python3",
