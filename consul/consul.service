@@ -4,7 +4,7 @@ Requires=network-online.target
 After=network-online.target
 
 [Service]
-EnvironmentFile=-/etc/sysconfig/consul
+EnvironmentFile=/opt/consul/config/consul_server_environment_vars
 Restart=on-failure
 ExecStart=/usr/local/bin/consul agent -ui $CONSUL_FLAGS -config-dir=/opt/consul/config -data-dir=/opt/consul
 ExecReload=/bin/kill -HUP $MAINPID

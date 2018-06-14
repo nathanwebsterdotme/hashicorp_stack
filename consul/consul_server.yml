@@ -53,8 +53,22 @@
       name: consul
       state: started
 
+  - name: Copy consul environment vars
+    copy:
+      src: consul_server_environment_vars
+      dest: /opt/consul/config/consul_server_environment_vars
+    notify:
+      - restart_consul_server
+
   - name: Set consul addr to make cli work
     lineinfile:
       path: /home/vagrant/.bashrc
       insertafter: EOF
       line: "export CONSUL_HTTP_ADDR={{ ansible_enp0s8.ipv4.address }}:8500"
+
+
+  handlers:
+    - name: restart_consul_server
+      service:
+        name: consul
+        state: restarted
