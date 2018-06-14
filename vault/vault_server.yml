@@ -1,0 +1,68 @@
+---
+- name: Configure Vault Server
+  hosts: all
+  become: yes
+  gather_facts: true
+
+  vars:
+    vault:
+      version: '0.10.2'
+
+  tasks:
+  - name: APT Install
+    apt:
+      pkg: "{{ item }}"
+      force: yes
+      update_cache: yes
+      state: present
+    with_items:
+      - unzip
+
+  - name: download vault package
+    get_url:
+      url: "https://releases.hashicorp.com/vault/{{ vault.version }}/vault_{{ vault.version }}_linux_amd64.zip"
+      dest: /usr/local/bin
+
+  - name: Unzip vault package
+    unarchive:
+      src: /usr/local/bin/vault_{{ vault.version }}_linux_amd64.zip
+      dest: /usr/local/bin/
+      remote_src: yes
+      mode: 0777
+
+  - name: Create Vault Directory
+    file:
+      state: directory
+      dest: "{{ item }}"
+    with_items:
+      - '/opt/vault'
+      - '/opt/vault/config'
+
+  - name: Copy vault configuration
+    template:
+      src: vault_server.hcl
+      dest: /opt/vault/config/vault_server_config.hcl
+    notify:
+      - restart_vault
+
+  - name: Install Vault file
+    copy:
+      src: vault_server.service
+      dest: /etc/systemd/system/vault_server.service
+
+  - name: Start vault
+    service:
+      name: vault_server
+      state: started
+
+  - name: Set vault addr to make cli work
+    lineinfile:
+      path: /home/vagrant/.bashrc
+      insertafter: EOF
+      line: "export VAULT_ADDR=http://127.0.0.1:8200"
+
+  handlers:
+    - name: restart_vault
+      service:
+        name: vault_server
+        state: restarted
