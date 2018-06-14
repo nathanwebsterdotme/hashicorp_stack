@@ -1,0 +1,5 @@
+---
+
+- import_playbook: '../consul/consul_client.yml'
+- import_playbook: '../consul/consul_client_join_cluster.yml'
+- import_playbook: 'vault_server.yml'

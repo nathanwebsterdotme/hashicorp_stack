@@ -1,0 +1,12 @@
+[Unit]
+Description=Vault Server
+
+[Service]
+KillMode=process
+KillSignal=SIGINT
+ExecStart=/usr/local/bin/vault server -config /opt/vault/config/vault_server_config.hcl
+ExecReload=/bin/kill -HUP $MAINPID
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target
