@@ -45,13 +45,8 @@
 
   - name: Install service file
     copy:
-      src: consul.service
-      dest: /etc/systemd/system/consul.service
-
-  - name: Start consul
-    service:
-      name: consul
-      state: started
+      src: consul_client.service
+      dest: /etc/systemd/system/consul_client.service
 
   - name: Copy consul environment vars
     copy:
@@ -59,6 +54,11 @@
       dest: /opt/consul/config/consul_server_environment_vars
     notify:
       - restart_consul_server
+
+  - name: Start consul
+    service:
+      name: consul
+      state: started
 
   - name: Set consul addr to make cli work
     lineinfile:

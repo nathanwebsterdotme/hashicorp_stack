@@ -46,8 +46,8 @@
 
   - name: Install service file
     copy:
-      src: consul.service
-      dest: /etc/systemd/system/consul.service
+      src: consul_client.service
+      dest: /etc/systemd/system/consul_client.service
 
   - name: Template dnsmasq
     template:
@@ -61,7 +61,7 @@
 
   - name: Start consul
     service:
-      name: consul
+      name: consul_client
       state: started
 
   # - name: Set consul addr to make cli work
