@@ -32,17 +32,25 @@
       - '/opt/traefik'
       - '/opt/traefik/config'
 
-  - name: Copy traefik configuration
-    copy:
-      src: traefik.toml
-      dest: /opt/traefik/config/traefik.toml
-
   - name: Install service file
     copy:
       src: traefik.service
       dest: /etc/systemd/system/traefik.service
 
+  - name: Copy traefik configuration
+    copy:
+      src: traefik.toml
+      dest: /opt/traefik/config/traefik.toml
+    notify:
+      - restart_traefik_server
+
   - name: Start traefik
     service:
       name: traefik
       state: started
+
+  handlers:
+    - name: restart_traefik_server
+      service:
+        name: traefik
+        state: restarted

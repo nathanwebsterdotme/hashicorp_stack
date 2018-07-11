@@ -8,7 +8,7 @@ defaultEntryPoints = ["http"]
 ################################################################
 [entryPoints]
     [entryPoints.http]
-    address = ":80"
+    address = ":8081"
 
 ################################################################
 # API and dashboard configuration
@@ -27,6 +27,6 @@ defaultEntryPoints = ["http"]
 
 endpoint = "127.0.0.1:8500"
 exposedByDefault = false
-domain = "test.localhost"
 prefix = "traefik"
+domain = "test.localhost"
 frontEndRule = "Host:{{.ServiceName}}.{{.Domain}}"

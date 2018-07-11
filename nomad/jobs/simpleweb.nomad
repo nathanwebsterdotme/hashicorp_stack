@@ -37,7 +37,11 @@ job "simpleweb" {
       service {
         port = "http"
         name = "simpleweb"
-        tags = ["traefik.enable=true", "simpleweb"]
+        tags = [
+          "traefik.frontend.rule=Host:simpleweb.com",
+          "traefik.enable=true",
+          "simpleweb"
+        ]
 
         check {
           type     = "tcp"
