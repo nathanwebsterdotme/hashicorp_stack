@@ -45,8 +45,8 @@
 
   - name: Install service file
     copy:
-      src: consul_client.service
-      dest: /etc/systemd/system/consul_client.service
+      src: consul_server.service
+      dest: /etc/systemd/system/consul_server.service
 
   - name: Copy consul environment vars
     copy:
@@ -57,7 +57,7 @@
 
   - name: Start consul
     service:
-      name: consul
+      name: consul_server
       state: started
 
   - name: Set consul addr to make cli work
@@ -70,5 +70,5 @@
   handlers:
     - name: restart_consul_server
       service:
-        name: consul
+        name: consul_server
         state: restarted
