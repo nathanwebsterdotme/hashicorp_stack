@@ -59,7 +59,10 @@
     lineinfile:
       path: /home/vagrant/.bashrc
       insertafter: EOF
-      line: "export VAULT_ADDR=http://127.0.0.1:8200"
+      line: "export VAULT_ADDR=http://{{ ansible_enp0s8.ipv4.address }}:8200"
+
+  - name: Install completions
+    shell: vault -autocomplete-install
 
   handlers:
     - name: restart_vault
