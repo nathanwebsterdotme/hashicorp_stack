@@ -39,6 +39,7 @@ job "simpleweb" {
         name = "simpleweb"
         tags = [
           "traefik.frontend.rule=Host:simpleweb.com",
+          "traefik.frontend.rule=Host:simpleweb.io",
           "traefik.enable=true",
           "simpleweb"
         ]
